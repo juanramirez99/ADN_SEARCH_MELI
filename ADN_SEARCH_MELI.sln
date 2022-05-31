@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADN_SEARCH_MELI", "ADN_SEARCH_MELI\ADN_SEARCH_MELI.csproj", "{3399AE4F-B283-4965-B04F-C31611EF2B5B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3399AE4F-B283-4965-B04F-C31611EF2B5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3399AE4F-B283-4965-B04F-C31611EF2B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3399AE4F-B283-4965-B04F-C31611EF2B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3399AE4F-B283-4965-B04F-C31611EF2B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA50D370-66F6-42D3-A265-27A784F1A862}
+	EndGlobalSection
+EndGlobal

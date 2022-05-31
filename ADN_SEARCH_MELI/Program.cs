@@ -10,27 +10,18 @@ namespace ADN_SEARCH_MELI
     {
         static void Main(string[] args)
         {
-            string [,] x = { 
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "C", "C", "C", "C"},
-                            { "X", "X", "X", "X", "Y", "Y", "Y", "Y" ,"W", "W", "W", "W", "X", "X", "X", "X"}, 
-                            { "Y", "Y", "Y", "Y", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"}, 
-                            { "X", "X", "X", "X", "W", "W", "W", "Y" ,"W", "W", "W", "W", "X", "X", "X", "X"}, 
-                            { "Y", "Y", "Y", "Y", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "X", "X", "X", "X", "Y", "Y", "Y", "Y" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "X", "X", "X", "X", "Y", "Y", "Y", "Y" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "Y", "Y", "Y", "Y", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "X", "X", "X", "X", "W", "W", "W", "Y" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "Y", "Y", "Y", "Y", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "W", "W", "W", "W", "X", "X", "X", "X" ,"W", "W", "W", "W", "X", "X", "X", "X"},
-                            { "X", "X", "X", "X", "Y", "Y", "Y", "Y" ,"T", "T", "T", "T", "X", "X", "X", "X"}
+            string[,] dna = {
+                            { "1", "W", "W", "W", "X", "X"},
+                            { "X", "2", "X", "X", "Y", "Y"},
+                            { "H", "Y", "3", "Y", "X", "X"},
+                            { "G", "H", "W", "4", "X", "X"},
+                            { "X", "G", "H", "X", "5", "W"},
+                            { "Y", "Y", "G", "H", "X", "6"}
                            };
 
-            bool z = IsMutant(x);
-            HorizontalRevision(x);
+            bool z = IsMutant(dna);
+            //HorizontalRevision(x);
+            DiagonalRevision(dna);
             Console.ReadLine();
         }
 
@@ -41,7 +32,7 @@ namespace ADN_SEARCH_MELI
             {
                 case "AAAA":
                     encontrado = true;
-                    Console.WriteLine("secuencia AAAA encontrada"); 
+                    Console.WriteLine("secuencia AAAA encontrada");
                     break;
                 case "TTTT":
                     encontrado = true;
@@ -56,7 +47,7 @@ namespace ADN_SEARCH_MELI
                     Console.WriteLine("secuencia GGGG encontrada");
                     break;
                 default:
-                    encontrado =false;
+                    encontrado = false;
                     break;
             }
             return encontrado;
@@ -64,9 +55,9 @@ namespace ADN_SEARCH_MELI
 
         public static void HorizontalRevision(string[,] dna)
         {
-            Console.WriteLine("Matrix de "+ dna.GetLength(0) + "X"+ dna.GetLength(1)+" Recibida");
+            Console.WriteLine("Matrix de " + dna.GetLength(0) + "X" + dna.GetLength(1) + " Recibida");
             int contadorSecuencia = 0;
-           
+
             for (int i = 0; i < dna.GetLength(0); i++)
             {
                 for (int j = 0; j < dna.GetLength(0); j++)
@@ -82,10 +73,28 @@ namespace ADN_SEARCH_MELI
                             Console.WriteLine("saltando a posicion en x-> " + "[" + i + "," + j + "]");
                         }
                     }
-                 }
+                }
             }
-            Console.WriteLine("Revision Horizontal finalizada " + contadorSecuencia+ " secuencias horizontales encontradas");
+            Console.WriteLine("Revision Horizontal finalizada " + contadorSecuencia + " secuencias horizontales encontradas");
         }
+
+        public static void DiagonalRevision(string[,] dna)
+        {
+            int longitud = dna.GetLength(0);
+            Console.WriteLine("longitud -> " + longitud);
+            int j = 2;
+            for (int i = 0; i <= 3; i++)
+            {
+                    Console.WriteLine("Posicion [" + j + "," + i + "]-> " + dna[j, i]);
+                if (j<longitud)
+                {
+                    j++;
+                }
+                
+            }
+        }
+
+        // matrix(row,column)
 
         public static bool IsMutant(string[,] dna)
         {
@@ -100,7 +109,7 @@ namespace ADN_SEARCH_MELI
             {
                 for (int j = 0; j < arraylen; j++)
                 {
-                    Console.Write(dna[i, j].ToString()+" ");
+                    Console.Write(dna[i, j].ToString() + " ");
                     /*if (dna[i,j] == sec1[0].ToString()
                         || dna[i, j] == sec1[0].ToString()
                         || dna[i, j] == sec2[0].ToString()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ADN_SEARCH_MELI
@@ -11,118 +12,119 @@ namespace ADN_SEARCH_MELI
         static void Main(string[] args)
         {
             string[,] dna = {
-                            { "1", "W", "W", "W", "X", "X"},
-                            { "X", "2", "X", "X", "Y", "Y"},
-                            { "H", "Y", "3", "Y", "X", "X"},
-                            { "G", "H", "W", "4", "X", "X"},
-                            { "X", "G", "H", "X", "5", "W"},
-                            { "Y", "Y", "G", "H", "X", "6"}
+                            { "1", "q", "T", "T", "T", "T"},
+                            { "X", "2", "w", "G", "x", "w"},
+                            { "1", "Y", "3", "e", "G", "e"},
+                            { "3", "C", "d", "C", "r", "e"},
+                            { "4", "G", "C", "X", "5", "d"},
+                            { "6", "Y", "G", "G", "G", "G"}
                            };
+            /*
+             * (2,0) -> H     (1,0) -> X    (0,0) -> 1  (0,1) -> W   (0,2) -> A
+             * (3,1) -> H     (2,1) -> Y    (1,1) -> 2  (1,2) -> X   (1,3) -> B
+             * (4,2) -> H     (3,2) -> W    (2,2) -> 3  (2,3) -> Y   (2,4) -> C
+             * (5,3) -> H     (4,3) -> X    (3,3) -> 4  (3,4) -> X   (3,5) -> D
+             *                (5,4) -> X    (4,4) -> 5  (4,5) -> W 
+             *                              (5,5) -> 6
+             *                              
+             * inicio  = longitud - 4  ->  6 - 4 = 2
+             * 
+             */
 
-            bool z = IsMutant(dna);
+            //bool z = 
             //HorizontalRevision(x);
-            DiagonalRevision(dna);
+            int sequenceCount = IsMutant(dna);
+            Console.WriteLine(sequenceCount >= 2 ? "IsMutant" : "IsHuman");
             Console.ReadLine();
         }
 
-        public static bool VerificacionSecuencia(string cadena)
+        public static int HorizontalRevision(string[,] dna, int count)
         {
-            bool encontrado = false;
-            switch (cadena)
+            int len = dna.GetLength(0);
+
+            for (int i = 0; i < len; i++)
             {
-                case "AAAA":
-                    encontrado = true;
-                    Console.WriteLine("secuencia AAAA encontrada");
-                    break;
-                case "TTTT":
-                    encontrado = true;
-                    Console.WriteLine("secuencia TTTT encontrada");
-                    break;
-                case "CCCC":
-                    encontrado = true;
-                    Console.WriteLine("secuencia CCCC encontrada");
-                    break;
-                case "GGGG":
-                    encontrado = true;
-                    Console.WriteLine("secuencia GGGG encontrada");
-                    break;
-                default:
-                    encontrado = false;
-                    break;
+                string tmp = string.Empty;
+                for (int j = 0; j < len; j++)
+                {
+                    tmp += dna[i, j];
+                }
+
+                if (tmp.Length > 3)
+                {
+                    count += Regex.Matches(tmp, "AAAA").Count
+                            + Regex.Matches(tmp, "TTTT").Count
+                            + Regex.Matches(tmp, "CCCC").Count
+                            + Regex.Matches(tmp, "GGGG").Count;
+                }
+
+                if (count == 2)
+                    return count;
             }
-            return encontrado;
+            return count;
         }
 
-        public static void HorizontalRevision(string[,] dna)
+        public static int VerticalRevision(string[,] dna, int count)
         {
-            Console.WriteLine("Matrix de " + dna.GetLength(0) + "X" + dna.GetLength(1) + " Recibida");
-            int contadorSecuencia = 0;
-
-            for (int i = 0; i < dna.GetLength(0); i++)
+            int len = dna.GetLength(0);
+            for (int j = 0; j < len; j++)
             {
-                for (int j = 0; j < dna.GetLength(0); j++)
+                string tmp = string.Empty;
+                for (int i = 0; i < len; i++)
                 {
-                    Console.WriteLine("verificando posicion-> " + "[" + i + "," + j + "]");
-                    if (j <= dna.GetLength(0) - 4)
+                    tmp += dna[i, j];
+                }
+
+                if (tmp.Length > 3)
+                {
+                    count += Regex.Matches(tmp, "AAAA").Count
+                            + Regex.Matches(tmp, "TTTT").Count
+                            + Regex.Matches(tmp, "CCCC").Count
+                            + Regex.Matches(tmp, "GGGG").Count;
+                }
+                if (count == 2)
+                    return count;
+            }
+            return count;
+        }
+
+        public static int ObliqueRevision(string[,] dna, int count)
+        {
+
+            int len = dna.GetLength(0);
+            for (int n = -len; n <= len - 4; n++)
+            {
+                string tmp = string.Empty;
+                for (int i = 0; i < len; i++)
+                {
+                    if ((i - n >= 0) && (i - n < len))
                     {
-                        bool encontrado = VerificacionSecuencia(dna[i, j] + dna[i, (j + 1)] + dna[i, (j + 2)] + dna[i, (j + 3)]);
-                        if (encontrado)
-                        {
-                            contadorSecuencia++;
-                            j = j + 4;
-                            Console.WriteLine("saltando a posicion en x-> " + "[" + i + "," + j + "]");
-                        }
+                        tmp = tmp + dna[i, (i - n)];
                     }
                 }
+                if (tmp.Length > 3)
+                {
+                    count += Regex.Matches(tmp, "AAAA").Count
+                            + Regex.Matches(tmp, "TTTT").Count
+                            + Regex.Matches(tmp, "CCCC").Count
+                            + Regex.Matches(tmp, "GGGG").Count;
+                }
+                if (count == 2)
+                    return count;
             }
-            Console.WriteLine("Revision Horizontal finalizada " + contadorSecuencia + " secuencias horizontales encontradas");
+            return count;
         }
 
-        public static void DiagonalRevision(string[,] dna)
+
+        public static int IsMutant(string[,] dna)
         {
-            int longitud = dna.GetLength(0);
-            Console.WriteLine("longitud -> " + longitud);
-            int j = 2;
-            for (int i = 0; i <= 3; i++)
-            {
-                    Console.WriteLine("Posicion [" + j + "," + i + "]-> " + dna[j, i]);
-                if (j<longitud)
-                {
-                    j++;
-                }
-                
-            }
-        }
-
-        // matrix(row,column)
-
-        public static bool IsMutant(string[,] dna)
-        {
-            string sec1 = "AAAA";
-            string sec2 = "";
-            string sec3 = "";
-            string sec4 = "";
-
-            Console.WriteLine("----------------------------------------------------\n");
-            int arraylen = dna.GetLength(0);
-            for (int i = 0; i < arraylen; i++)
-            {
-                for (int j = 0; j < arraylen; j++)
-                {
-                    Console.Write(dna[i, j].ToString() + " ");
-                    /*if (dna[i,j] == sec1[0].ToString()
-                        || dna[i, j] == sec1[0].ToString()
-                        || dna[i, j] == sec2[0].ToString()
-                        || dna[i, j] == sec3[0].ToString())
-                    {
-                        Console.WriteLine("Empieza por " + dna[i, j]);
-                        //vecinos()
-                    }*/
-                }
-                Console.WriteLine("\n");
-            }
-            Console.WriteLine("----------------------------------------------------\n");
-            return true;
+            int sequenceCount = 0;
+            sequenceCount = VerticalRevision(dna, sequenceCount);
+            if (sequenceCount < 2)
+                sequenceCount = HorizontalRevision(dna, sequenceCount);
+            if (sequenceCount < 2)
+                sequenceCount = ObliqueRevision(dna, sequenceCount);
+            return sequenceCount;
         }
     }
 }

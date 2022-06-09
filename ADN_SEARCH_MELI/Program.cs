@@ -14,10 +14,10 @@ namespace ADN_SEARCH_MELI
             string[,] dna = {
                             { "1", "q", "T", "T", "T", "T"},
                             { "X", "2", "w", "G", "x", "w"},
-                            { "1", "Y", "3", "e", "G", "e"},
+                            { "C", "Y", "3", "e", "G", "e"},
                             { "3", "C", "d", "C", "r", "e"},
                             { "4", "G", "C", "X", "5", "d"},
-                            { "6", "Y", "G", "G", "G", "G"}
+                            { "6", "Y", "G", "F", "d", "d"}
                            };
             /*
              * (2,0) -> H     (1,0) -> X    (0,0) -> 1  (0,1) -> W   (0,2) -> A
@@ -31,8 +31,6 @@ namespace ADN_SEARCH_MELI
              * 
              */
 
-            //bool z = 
-            //HorizontalRevision(x);
             int sequenceCount = IsMutant(dna);
             Console.WriteLine(sequenceCount >= 2 ? "IsMutant" : "IsHuman");
             Console.ReadLine();
@@ -114,7 +112,6 @@ namespace ADN_SEARCH_MELI
             }
             return count;
         }
-
 
         public static int IsMutant(string[,] dna)
         {

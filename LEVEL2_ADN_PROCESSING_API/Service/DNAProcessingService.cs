@@ -35,6 +35,22 @@ namespace LEVEL2_ADN_PROCESSING_API.Service
             return count;
         }
 
+        public string[,] CastToDNAMatrix(List<string> val)
+        {
+            int len = val[0].Length;
+            string[,] dna = new string[len, len];
+            for (int i = 0; i < len; i++)
+            {
+                var res = val[i].Select(x => new string(x, 1)).ToArray();
+                for (int j = 0; j < len; j++)
+                {
+                    dna[i, j] = res[j];
+
+                }
+            }
+            return dna;
+        }
+
         private int VerticalRevision(string[,] dna, int count)
         {
             int len = dna.GetLength(0);
@@ -86,14 +102,15 @@ namespace LEVEL2_ADN_PROCESSING_API.Service
             return count;
         }
 
-        public async Task<int> IsMutant(string[,] dna)
+        //TODO MAKE THIS METHOD ASYNC FOR PARALLELL PROCESS
+        public int IsMutant(string[,] dna)
         {
-            Task<int> sequenceCount = 0;
-            sequenceCount = await Task.Run(() => VerticalRevision(dna, sequenceCount)).Result;
+           int sequenceCount = 0;
+            sequenceCount = VerticalRevision(dna, sequenceCount);
             if (sequenceCount < 2)
-                sequenceCount = await Task.Run(() => HorizontalRevision(dna, sequenceCount)).Result;
+                sequenceCount = HorizontalRevision(dna, sequenceCount);
             if (sequenceCount < 2)
-                sequenceCount = await Task.Run(() => ObliqueRevision(dna, sequenceCount)).Result;
+                sequenceCount = ObliqueRevision(dna, sequenceCount);
             return sequenceCount;
         }
     }

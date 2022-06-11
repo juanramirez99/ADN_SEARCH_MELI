@@ -1,3 +1,5 @@
+using Belgrade.SqlClient;
+using Belgrade.SqlClient.SqlDb;
 using LEVEL2_ADN_PROCESSING_API.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DNAProcessingService>();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

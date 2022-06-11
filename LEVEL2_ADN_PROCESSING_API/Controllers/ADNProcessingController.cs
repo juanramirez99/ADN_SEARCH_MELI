@@ -1,5 +1,8 @@
-﻿using LEVEL2_ADN_PROCESSING_API.Service;
+﻿using Belgrade.SqlClient;
+using Belgrade.SqlClient.SqlDb;
+using LEVEL2_ADN_PROCESSING_API.Service;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 using System.Net;
 
 
@@ -12,10 +15,14 @@ namespace LEVEL2_ADN_PROCESSING_API.Controllers
         private readonly ILogger<ADNProcessingController> _logger;
         private readonly DNAProcessingService _processingService;
 
-        public ADNProcessingController(ILogger<ADNProcessingController> logger, DNAProcessingService dnaProcessingService)
+
+
+
+        public ADNProcessingController(ILogger<ADNProcessingController> logger, DNAProcessingService dnaProcessingService )
         {
             _logger = logger;
             _processingService = dnaProcessingService;
+           
         }
 
         [HttpPost(Name = "Mutant")]
@@ -34,15 +41,11 @@ namespace LEVEL2_ADN_PROCESSING_API.Controllers
         }
 
         [HttpGet(Name = "Stats")]
-        public Stats Stats()
+        public Task<Stats> Stats()
         {
-            Stats stats = new Stats()
-            {
-                CountHumanDNA = 40,
-                CountMutantDNA = 60,
-                Ratio = 6F
-            };
-            return stats;
-        }
+            var result = _processingService.GetRatio();
+            return result;
+            
+         }
     }
 }

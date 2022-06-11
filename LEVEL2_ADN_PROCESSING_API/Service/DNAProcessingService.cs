@@ -1,12 +1,17 @@
-﻿using System.Text.RegularExpressions;
+﻿using Belgrade.SqlClient;
+using Belgrade.SqlClient.SqlDb;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace LEVEL2_ADN_PROCESSING_API.Service
 {
     public class DNAProcessingService
     {
+        private const string ConnString = "Server =.; Database = ADN_DB; user id = sa; password = 123456; MultipleActiveResultSets = true";
+        private IQueryMapper _queryMapper = new QueryMapper(ConnString);
         public DNAProcessingService()
         {
-
+           
         }
 
         private int HorizontalRevision(string[,] dna, int count)
@@ -50,6 +55,8 @@ namespace LEVEL2_ADN_PROCESSING_API.Service
             }
             return dna;
         }
+
+       
 
         private int VerticalRevision(string[,] dna, int count)
         {
@@ -111,7 +118,40 @@ namespace LEVEL2_ADN_PROCESSING_API.Service
                 sequenceCount = HorizontalRevision(dna, sequenceCount);
             if (sequenceCount < 2)
                 sequenceCount = ObliqueRevision(dna, sequenceCount);
+            AddStatsRecord(sequenceCount >= 2?1:0);
             return sequenceCount;
+        }
+
+        public async void AddStatsRecord(int result)
+        {
+            ICommand cmd = new Command(ConnString);
+            var date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            await cmd.Sql($"INSERT INTO ADNHistory (IsMutant, Date) VALUES ({result},'{date}')").Exec();
+        }
+        public async Task<Stats> GetRatio()
+        {
+            List<Stats> result =
+            await _queryMapper.Sql
+            (
+                $@"  SELECT TOP 1
+	                (SELECT count(*) FROM  ADNHistory WHERE IsMutant = 1 ) AS Count_Mutant_DNA,
+	                (SELECT count(*) FROM  ADNHistory WHERE IsMutant = 0 ) AS count_Human_DNA, 
+	                (0.4) AS Ratio
+                    FROM ADNHistory"
+            )
+            .Map<Stats>(
+                row => new Stats
+                {
+                   CountMutantDNA = Convert.ToInt32(row[0]),
+                   CountHumanDNA= Convert.ToInt32(row[1]),
+                   Ratio = Convert.ToInt32(row[2])
+                });
+
+            if (!result.Any())
+            {
+                return new Stats() {CountHumanDNA =0, CountMutantDNA=0,Ratio =0 };
+            }
+            return result[0];
         }
     }
 }

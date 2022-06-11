@@ -7,6 +7,13 @@
         public int CountHumanDNA { get; set; }
 
         public float Ratio { get; set; }
+    }
+
+    public class StatsDB 
+    {
+        public int numberOf { get; set; }
+        public int percentage { get; set; }
+        public bool IsHuman { get; set; }
 
     }
 }

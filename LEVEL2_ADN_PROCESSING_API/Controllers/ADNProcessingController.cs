@@ -15,9 +15,6 @@ namespace LEVEL2_ADN_PROCESSING_API.Controllers
         private readonly ILogger<ADNProcessingController> _logger;
         private readonly DNAProcessingService _processingService;
 
-
-
-
         public ADNProcessingController(ILogger<ADNProcessingController> logger, DNAProcessingService dnaProcessingService )
         {
             _logger = logger;
